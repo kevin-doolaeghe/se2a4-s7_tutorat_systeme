@@ -33,19 +33,17 @@ typedef struct
  *  should have a unique ID index associated with it, which can be used to refer to the
  *  interface from other descriptors.
  */
-enum InterfaceDescriptors_t
-{
-	INTERFACE_ID_Joystick = 0, /**< Joystick interface desciptor ID */
-	INTERFACE_ID_Led = 1, /**< LEDs interface desciptor ID */
-	INTERFACE_ID_Buzzer = 2, /**< Buzzers interface desciptor ID */
+enum InterfaceDescriptors_t {
+	INTERFACE_ID_Joystick 	= 0, /**< Joystick interface desciptor ID */
+	INTERFACE_ID_Led 		= 1, /**< LEDs interface desciptor ID */
+	INTERFACE_ID_Buzzer 	= 2, /**< Buzzers interface desciptor ID */
 };
 
 /** Enum for the device string descriptor IDs within the device. Each string descriptor should
  *  have a unique ID index associated with it, which can be used to refer to the string from
  *  other descriptors.
  */
-enum StringDescriptors_t
-{
+enum StringDescriptors_t{
 	STRING_ID_Language     = 0, /**< Supported Languages string descriptor ID (must be zero) */
 	STRING_ID_Manufacturer = 1, /**< Manufacturer string ID */
 	STRING_ID_Product      = 2, /**< Product string ID */

@@ -7,35 +7,29 @@ static uint8_t PrevJoystickHIDReportBuffer[sizeof(USB_JoystickReport_Data_t)];
  *  passed to all HID Class driver functions, so that multiple instances of the same class
  *  within a device can be differentiated from one another.
  */
-USB_ClassInfo_HID_Device_t Joystick_HID_Interface =
-	{
-		.Config =
-			{
-				.InterfaceNumber              = INTERFACE_ID_Joystick,
-				.ReportINEndpoint             =
-					{
-						.Address              = JOYSTICK_IN_EPADDR,
-						.Size                 = JOYSTICK_EPSIZE,
-						.Banks                = 1,
-					},
-				.PrevReportINBuffer           = PrevJoystickHIDReportBuffer,
-				.PrevReportINBufferSize       = sizeof(PrevJoystickHIDReportBuffer),
-			},
-	};
-
+USB_ClassInfo_HID_Device_t Joystick_HID_Interface = {
+	.Config = {
+		.InterfaceNumber              = INTERFACE_ID_Joystick,
+		.ReportINEndpoint             = {
+			.Address              = JOYSTICK_IN_EPADDR,
+			.Size                 = JOYSTICK_EPSIZE,
+			.Banks                = 1,
+		},
+		.PrevReportINBuffer           = PrevJoystickHIDReportBuffer,
+		.PrevReportINBufferSize       = sizeof(PrevJoystickHIDReportBuffer),
+	},
+};
 
 /** Main program entry point. This routine contains the overall program flow, including initial
  *  setup of all components and the main program loop.
  */
-int main(void)
-{
+int main(void) {
 	SetupHardware();
 
 	LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
 	GlobalInterruptEnable();
 
-	for (;;)
-	{
+	for (;;) {
 		HID_Device_USBTask(&Joystick_HID_Interface);
 		Led_Task();
 		Buzzer_Task();
@@ -44,8 +38,7 @@ int main(void)
 }
 
 /** Configures the board hardware and chip peripherals for the demo's functionality. */
-void SetupHardware(void)
-{
+void SetupHardware(void) {
 #if (ARCH == ARCH_AVR8)
 	/* Disable watchdog if enabled by bootloader/fuses */
 	MCUSR &= ~(1 << WDRF);
@@ -74,20 +67,17 @@ void SetupHardware(void)
 }
 
 /** Event handler for the library USB Connection event. */
-void EVENT_USB_Device_Connect(void)
-{
+void EVENT_USB_Device_Connect(void) {
 	LEDs_SetAllLEDs(LEDMASK_USB_ENUMERATING);
 }
 
 /** Event handler for the library USB Disconnection event. */
-void EVENT_USB_Device_Disconnect(void)
-{
+void EVENT_USB_Device_Disconnect(void) {
 	LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
 }
 
 /** Event handler for the library USB Configuration Changed event. */
-void EVENT_USB_Device_ConfigurationChanged(void)
-{
+void EVENT_USB_Device_ConfigurationChanged(void) {
 	bool ConfigSuccess = true;
 
 	/* Setup Endpoints */
@@ -101,14 +91,12 @@ void EVENT_USB_Device_ConfigurationChanged(void)
 }
 
 /** Event handler for the library USB Control Request reception event. */
-void EVENT_USB_Device_ControlRequest(void)
-{
+void EVENT_USB_Device_ControlRequest(void) {
 	HID_Device_ProcessControlRequest(&Joystick_HID_Interface);
 }
 
 /** Event handler for the USB device Start Of Frame event. */
-void EVENT_USB_Device_StartOfFrame(void)
-{
+void EVENT_USB_Device_StartOfFrame(void) {
 	HID_Device_MillisecondElapsed(&Joystick_HID_Interface);
 }
 
@@ -126,15 +114,14 @@ bool CALLBACK_HID_Device_CreateHIDReport(USB_ClassInfo_HID_Device_t* const HIDIn
                                          uint8_t* const ReportID,
                                          const uint8_t ReportType,
                                          void* ReportData,
-                                         uint16_t* const ReportSize)
-{
-	USB_JoystickReport_Data_t* JoystickReport = (USB_JoystickReport_Data_t*)ReportData;
+                                         uint16_t* const ReportSize) {
+	USB_JoystickReport_Data_t* JoystickReport = (USB_JoystickReport_Data_t*) ReportData;
 
 	unsigned char inputs[NB_PORTS];
 	Get_Inputs(inputs);
 
 	Init_Adc(ADC_JOYX);
-	int x = Read_Adc() * 100 / 256;
+	int x = Read_Adc() * 100 / 256; // * 200 / 256 - 100;
 	Init_Adc(ADC_JOYY);
 	int y = Read_Adc() * 100 / 256;
 
@@ -182,8 +169,7 @@ void CALLBACK_HID_Device_ProcessHIDReport(USB_ClassInfo_HID_Device_t* const HIDI
                                           const uint8_t ReportID,
                                           const uint8_t ReportType,
                                           const void* ReportData,
-                                          const uint16_t ReportSize)
-{
+                                          const uint16_t ReportSize) {
 	// Unused (but mandatory for the HID class driver) in this demo, since there are no Host->Device reports
 }
 
@@ -265,64 +251,13 @@ void Manette_Init(void) {
 
 	// Chenillard
 	for (i=0; i < MAX_LED; i++) {
-        Set_Output(leds,i);
+        Set_Output(leds, i);
         _delay_ms(100);
-        Unset_Output(leds,i);
+        Unset_Output(leds, i);
         _delay_ms(100);
     }
-    
-	#if 0
-	while (1) {
-		unsigned char inputs[NB_PORTS];
-		Get_Inputs(inputs);
 
-		if (Active_Input(bt_up, inputs)) {
-			Set_Output(leds, 0);
-		} else {
-			Unset_Output(leds, 0);
-		}
-
-		if (Active_Input(bt_left, inputs)) {
-			Set_Output(leds, 1);
-		} else {
-			Unset_Output(leds, 1);
-		}
-		
-		if (Active_Input(bt_right, inputs)) {
-			Set_Output(leds, 2);
-		} else {
-			Unset_Output(leds, 2);
-		}
-
-		if (Active_Input(bt_down, inputs)) {
-			Set_Output(leds, 3);
-		} else {
-			Unset_Output(leds, 3);
-		}
-		
-		if (Active_Input(bt_tir, inputs)) {
-			Set_Output(leds, 4);
-		} else {
-			Unset_Output(leds, 4);
-		}
-
-		if (Active_Input(bt_joy, inputs)) {
-			Set_Output(leds, 5);
-		} else {
-			Unset_Output(leds, 5);
-		}
-		
-		Toggle_Output(leds,10);
-		_delay_ms(100);
-	}
-	#endif
-
-	#if 0
-	while (1) {
-		Init_Adc(ADC_JOYX);
-		int v = Read_Adc();
-		int led = v * 11 / 256;
-		Set_Output(leds, led);
-	}
-	#endif
+	Set_Output(buzzers, 0);
+	_delay_ms(500);
+	Unset_Output(buzzers, 0);
 }
