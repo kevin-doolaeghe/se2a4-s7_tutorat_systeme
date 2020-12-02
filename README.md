@@ -16,7 +16,9 @@ Le projet contient deux programmes :
 
 1. LUFA
 
-Compilation et lancement du programme :
+Il est au préalable nécessaire de brancher et réinitialiser la manette.
+
+Compilation et chargement du programme pour l'ATMega32u4 de la plaquette :
 
 ```bash
 cd lufa-LUFA-170418/PolytechLille/Manette
