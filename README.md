@@ -1,4 +1,4 @@
-# USB-Device-LUFA---libusb-1) LIBUSB
+# Polytech Lille - IMA2A4 - Tutorat Système
 
 ## Sujet du tutorat
 
