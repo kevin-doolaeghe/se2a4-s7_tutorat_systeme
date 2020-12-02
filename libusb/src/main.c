@@ -7,8 +7,6 @@
 #define ID_PRODUCT            0x0001
 #define LED_INTERFACE         1
 #define BUZZER_INTERFACE      2
-#define HID_ENDPOINT_IN       0x81
-//#define HID_ENDPOINT_OUT    0x01
 #define LED_ENDPOINT_OUT      0x02
 #define BUZZER_ENDPOINT_OUT   0x03
 

@@ -117,41 +117,36 @@ bool CALLBACK_HID_Device_CreateHIDReport(USB_ClassInfo_HID_Device_t* const HIDIn
                                          uint16_t* const ReportSize) {
 	USB_JoystickReport_Data_t* JoystickReport = (USB_JoystickReport_Data_t*) ReportData;
 
+	Init_Adc(ADC_JOYX);
+	int x = ((float) Read_Adc() * 200 / 256 - 100); // Mapping entre -100 et 100 de la valeur entre 0 et 256
+	Init_Adc(ADC_JOYY);
+	int y = ((float) Read_Adc() * 200 / 256 - 100);
+
 	unsigned char inputs[NB_PORTS];
+	int button = 0;
 	Get_Inputs(inputs);
 
-	Init_Adc(ADC_JOYX);
-	int x = Read_Adc() * 100 / 256; // * 200 / 256 - 100;
-	Init_Adc(ADC_JOYY);
-	int y = Read_Adc() * 100 / 256;
-
-	if (y < 30)
-	  JoystickReport->Y = -100;
-	else if (y > 70)
-	  JoystickReport->Y =  100;
-
-	if (x < 30)
-	  JoystickReport->X = -100;
-	else if (x > 70)
-	  JoystickReport->X =  100;
-
 	if (Active_Input(bt_up, inputs))
-		JoystickReport->Button |= (1 << 0);
+		button |= (1 << 0);
 
 	if (Active_Input(bt_left, inputs))
-		JoystickReport->Button |= (1 << 1);
+		button |= (1 << 1);
 	
 	if (Active_Input(bt_right, inputs))
-		JoystickReport->Button |= (1 << 2);
+		button |= (1 << 2);
 
 	if (Active_Input(bt_down, inputs))
-		JoystickReport->Button |= (1 << 3);
+		button |= (1 << 3);
 
 	if (Active_Input(bt_tir, inputs))
-		JoystickReport->Button |= (1 << 4);
+		button |= (1 << 4);
 
 	if (Active_Input(bt_joy, inputs))
-		JoystickReport->Button |= (1 << 5);
+		button |= (1 << 5);
+
+	JoystickReport->X = x;
+	JoystickReport->Y = y;
+	JoystickReport->Button = button;
 
 	*ReportSize = sizeof(USB_JoystickReport_Data_t);
 	return false;
@@ -196,7 +191,7 @@ void ProcessBuzzerReport(uint8_t BuzzerReport) {
 void Led_Task(void) {
 	/* Device must be connected and configured for the task to run */
 	if (USB_DeviceState != DEVICE_STATE_Configured)
-	  return;
+	  	return;
 	
 	/* Select the Keyboard LED Report Endpoint */
 	Endpoint_SelectEndpoint(LED_OUT_EPADDR);
@@ -222,7 +217,7 @@ void Led_Task(void) {
 void Buzzer_Task(void) {
 	/* Device must be connected and configured for the task to run */
 	if (USB_DeviceState != DEVICE_STATE_Configured)
-	  return;
+		return;
 	
 	/* Select the Keyboard LED Report Endpoint */
 	Endpoint_SelectEndpoint(BUZZER_OUT_EPADDR);
@@ -250,7 +245,7 @@ void Manette_Init(void) {
   	int i;
 
 	// Chenillard
-	for (i=0; i < MAX_LED; i++) {
+	for (i = 0; i < MAX_LED; i++) {
         Set_Output(leds, i);
         _delay_ms(100);
         Unset_Output(leds, i);
