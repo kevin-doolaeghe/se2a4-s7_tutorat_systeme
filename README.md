@@ -14,7 +14,7 @@ Le projet contient deux programmes :
 - Un programme permettant de compiler et charger le firmware du microcontrôleur ATMega32u4 de la manette.
 - Un programme C utilisant la bibliothèque LIBUSB pour contrôler les LEDs et vibreurs de la plaquette via la communication USB.
 
-1. LUFA
+### 1. LUFA
 
 Il est au préalable nécessaire de brancher et réinitialiser la manette.
 
@@ -32,7 +32,7 @@ Le programme crée trois interfaces :
 
 Les LEDs et vibreurs sont contrôlables via le programme libusb décrit ci-après.
 
-2. LIBUSB
+### 2. LIBUSB
 
 Différentes commandes sont disponibles pour le contrôle de la plaquette :
 
