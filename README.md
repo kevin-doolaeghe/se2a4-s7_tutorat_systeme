@@ -45,7 +45,7 @@ Compilation et lancement du programme :
 - Brancher la manette (vérifier avec lsusb).
 - Charger le firmware à l'aide des commandes ci-dessous :
 
-```
+```bash
 cd libusb
 make rebuild && sudo ./build/output
 ```
