@@ -8,6 +8,16 @@
 
 [https://wiki-ima.plil.fr/mediawiki/index.php/IMA4_2018/2019_SEC4](https://wiki-ima.plil.fr/mediawiki/index.php/IMA4_2018/2019_SEC4)
 
+## Préambule
+
+Avant de compiler et d'utiliser les programmes, il est nécessaire que certains paquets soient installés.
+
+La commande permettant d'installer ces paquets est la suivante :
+
+```bash
+apt install dfu-programmer avrdude avr-libc gcc-avr make build-essential gcc
+```
+
 ## Fonctionnement
 
 Le projet contient deux programmes :
