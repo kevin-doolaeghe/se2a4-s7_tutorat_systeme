@@ -44,6 +44,9 @@ void SetupHardware(void) {
 	MCUSR &= ~(1 << WDRF);
 	wdt_disable();
 
+	MCUCR |= (1 << JTD);
+	MCUCR |= (1 << JTD);
+
 	/* Disable clock division */
 	clock_prescale_set(clock_div_1);
 #elif (ARCH == ARCH_XMEGA)
@@ -169,8 +172,9 @@ void CALLBACK_HID_Device_ProcessHIDReport(USB_ClassInfo_HID_Device_t* const HIDI
 }
 
 void ProcessLedReport(uint16_t LedReport) {
-	for (uint16_t i = 0; i < MAX_LED; i++) {
-		if (LedReport & (1 << i)) {
+	int i;
+	for (i = 0; i < MAX_LED; i++) {
+		if ((LedReport & (1 << i)) != 0) {
 			Set_Output(leds, i);
 		} else {
 			Unset_Output(leds, i);
@@ -179,8 +183,9 @@ void ProcessLedReport(uint16_t LedReport) {
 }
 
 void ProcessBuzzerReport(uint8_t BuzzerReport) {
-	for (uint8_t i = 0; i < MAX_BUZZER; i++) {
-		if (BuzzerReport & (1 << i)) {
+	int i;
+	for (i = 0; i < MAX_BUZZER; i++) {
+		if ((BuzzerReport & (1 << i)) != 0) {
 			Set_Output(buzzers, i);
 		} else {
 			Unset_Output(buzzers, i);
@@ -255,4 +260,10 @@ void Manette_Init(void) {
 	Set_Output(buzzers, 0);
 	_delay_ms(500);
 	Unset_Output(buzzers, 0);
+
+	_delay_ms(1000);
+
+	Set_Output(buzzers, 1);
+	_delay_ms(500);
+	Unset_Output(buzzers, 1);
 }

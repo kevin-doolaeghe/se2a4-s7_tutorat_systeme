@@ -51,3 +51,15 @@ make rebuild && sudo ./build/output
 ```
 
 Le programme peut envoyer différentes requêtes comme allumer un vibreur par exemple.
+
+## Mise en pratique de la manette
+
+Pour tester la manette, il est possible d'utiliser les paquets suivants :
+- wordwarvi : Jeu utilisant la manette
+- jstest-gtk : Programme permettant de voir et de tester les propriétés de la manette
+
+Pour installer ces paquets, il faut utiliser la commande ci-dessous.
+
+```bash
+apt install wordwarvi jstest-gtk
+```

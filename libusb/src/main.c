@@ -196,7 +196,7 @@ void control_board() {
     switch (action) {
     case 'a':
       {
-      unsigned char data[] = {0x00, 0x03};
+      unsigned char data[] = {0x55, 0x55};
       interrupt_request(LED_ENDPOINT_OUT, data);
       }
       sleep(1);
@@ -220,18 +220,27 @@ void control_board() {
       break;
     case 'd':
       {
-      unsigned char data = 0x00;
+      unsigned char data = 0x02;
       interrupt_request(BUZZER_ENDPOINT_OUT, &data);
       }
       sleep(1);
       printf("Processed command 'd'\n");
       break;
+    case 'e':
+      {
+      unsigned char data = 0x00;
+      interrupt_request(BUZZER_ENDPOINT_OUT, &data);
+      }
+      sleep(1);
+      printf("Processed command 'e'\n");
+      break;
     case 'h':
       printf("Help:\n");
-      printf("\ta -> Send 0x0003 to Led Interface\n");
+      printf("\ta -> Send 0x5555 to Led Interface\n");
       printf("\tb -> Send 0x0000 to Led Interface\n");
       printf("\tc -> Send 0x01 to Buzzer Interface\n");
-      printf("\td -> Send 0x00 to Buzzer Interface\n");
+      printf("\td -> Send 0x02 to Buzzer Interface\n");
+      printf("\te -> Send 0x00 to Buzzer Interface\n");
       break;
     case 'q':
       printf("\nBye!\n");
