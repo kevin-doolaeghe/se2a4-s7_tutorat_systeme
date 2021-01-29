@@ -163,10 +163,10 @@ void get_configuration() {
  * Functions to control device
  */
 
-void interrupt_request(int endpoint, unsigned char *data) {
+void interrupt_request(int endpoint, unsigned char *data, int size) {
   int len = 0;
   int status = libusb_interrupt_transfer(handle, endpoint, data,
-                                         sizeof(data), &len, 0);
+                                         size, &len, 0);
   if (status != 0) {
     perror("libusb_interrupt_transfer");
     exit(-1);
@@ -174,10 +174,10 @@ void interrupt_request(int endpoint, unsigned char *data) {
 }
 
 // Not used
-void bulk_request(int endpoint, unsigned char *data) {
+void bulk_request(int endpoint, unsigned char *data, int size) {
   int len = 0;
   int status = libusb_bulk_transfer(handle, endpoint, data,
-                                         sizeof(data), &len, 0);
+                                         size, &len, 0);
   if (status != 0) {
     perror("libusb_interrupt_transfer");
     exit(-1);
@@ -197,7 +197,7 @@ void control_board() {
     case 'a':
       {
       unsigned char data[] = {0x55, 0x55};
-      interrupt_request(LED_ENDPOINT_OUT, data);
+      interrupt_request(LED_ENDPOINT_OUT, data, sizeof(data));
       }
       sleep(1);
       printf("Processed command 'a'\n");
@@ -205,7 +205,7 @@ void control_board() {
     case 'b':
       {
       unsigned char data[] = {0x00, 0x00};
-      interrupt_request(LED_ENDPOINT_OUT, data);
+      interrupt_request(LED_ENDPOINT_OUT, data, sizeof(data));
       }
       sleep(1);
       printf("Processed command 'b'\n");
@@ -213,7 +213,7 @@ void control_board() {
     case 'c':
       {
       unsigned char data = 0x01;
-      interrupt_request(BUZZER_ENDPOINT_OUT, &data);
+      interrupt_request(BUZZER_ENDPOINT_OUT, &data, sizeof(data));
       }
       sleep(1);
       printf("Processed command 'c'\n");
@@ -221,7 +221,7 @@ void control_board() {
     case 'd':
       {
       unsigned char data = 0x02;
-      interrupt_request(BUZZER_ENDPOINT_OUT, &data);
+      interrupt_request(BUZZER_ENDPOINT_OUT, &data, sizeof(data));
       }
       sleep(1);
       printf("Processed command 'd'\n");
@@ -229,7 +229,7 @@ void control_board() {
     case 'e':
       {
       unsigned char data = 0x00;
-      interrupt_request(BUZZER_ENDPOINT_OUT, &data);
+      interrupt_request(BUZZER_ENDPOINT_OUT, &data, sizeof(data));
       }
       sleep(1);
       printf("Processed command 'e'\n");
