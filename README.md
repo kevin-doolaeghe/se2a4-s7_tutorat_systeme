@@ -1,4 +1,4 @@
-# Polytech Lille - IMA2A4 - Tutorat Système
+# Polytech Lille - IMA2A4 S7 - Tutorat Système
 
 ## Sujet du tutorat
 
